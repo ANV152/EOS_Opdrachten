@@ -1,0 +1,14 @@
+Command: cat dirTest/EOS_Opdrachten
+Status: 1
+Command: cat dirTest/file1
+Status: 0
+Command: cat dirTest/file1.txt
+Status: 0
+Command: cat dirTest/naarPNG
+Status: 0
+Command: cat dirTest/sherry-christian-8Myh76_3M2U-unsplash.jpg
+Status: 0
+Command: cat dirTest/sorteerAfbeeldingen.txt
+Status: 0
+Command: cat dirTest/subFolder
+Status: 1

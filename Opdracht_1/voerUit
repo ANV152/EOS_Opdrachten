@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+bestand="$1"
+extensie="${bestand##*.}"
+echo "de bestand extensie is de volgende $extensie" 
+case $extensie in
+     py)
+	/usr/bin/python3 "$bestand"
+	echo "python here"
+	;;
+     sh)
+	/bin/bash "$bestand"
+	;;
+     cc)
+	cat "$bestand"
+esac
+

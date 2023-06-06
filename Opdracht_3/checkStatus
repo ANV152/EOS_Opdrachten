@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+pad="$1"
+command="$2"
+logfile="$3"
+if [ -f "$logfile" ]; then
+ rm "$logfile"
+ touch "$logfile"
+fi
+for bestand in "$pad"/*; do
+  full_command="${command} ${bestand}"
+  output=$(eval "$full_command")
+  return_status=$?
+  echo "Command: $full_command" >> "$logfile"
+  echo "Status: $return_status" >> "$logfile"
+  
+done
+
