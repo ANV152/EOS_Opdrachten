@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+echo "Voer je naam in: "
+read naam
+naam_lengte=${#naam}
+user=$(whoami)
+wcht_bestand="$1"
+if [ "$naam_lengte" -eq 0 ]; then
+  naam="$user"
+fi
+count=0
+first_wcht=""
+while [ "$count" -lt 2 ]
+do
+   echo "Voer wachtwoord in (het moet langer dan 8 characters zijn):"
+   read wachtwoord
+   wachtwoord_l=${#wachtwoord}	
+   if [ "$wachtwoord_l" -ge 8 ] && [ "$count" -eq 0 ]; then
+     count=$((count + 1))
+     first_wcht="$wachtwoord"
+    elif [ "$wachtwoord_l" -ge 8 ] && [ "$wachtwoord" == "$first_wcht" ]; then
+      count=$((count + 1))
+   else
+     echo "A.U.B, probeer nogmaals een wachtwoord in te vullen"
+     count=0	
+   fi
+   
+done
+if [ ! -f "$wcht_bestand" ]; then
+  touch "$wcht_bestand"
+fi
+echo "Encrypted password: " > "$wcht_bestand" 
+echo -n "$wachtwoord" | md5sum >> "$wcht_bestand"
+echo -n "Date:" >> "$wcht_bestand"
+echo -n $(date) >>  "$wcht_bestand"  
+echo "Log in Succesfull!"
+
+
+
