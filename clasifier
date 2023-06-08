@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+#Deze code zorgt ervoor dat iedere bestand die wordt gedownload wordt ingedeeld op basis van zijn formaat extensie
+download_dir="$HOME/Downloads"
+bestemming_dir="$HOME/Downloads"
+mkdir -p "$bestemming_dir/Documents"
+mkdir -p "$bestemming_dir/Afbeeldingen"
+mkdir -p "$bestemming_dir/Videos"
+mkdir -p "$bestemming_dir/Scripts"
+# de onderstaande functie zorgt ervoor dat de bestanden worden verplaatst naar zijn juiste directory 
+sortBestanden() { 
+	local bestand=$1
+	local lw_case=$2
+	local bestand_naam=$3
+	case "$lw_case" in
+	    doc|docx|pdf|txt)
+	    	mv "$bestand" "$bestemming_dir/Documents/$bestand_naam"
+	    	echo "Bestand naar Document verschuifd"
+	    	;;
+	    jpg|jpeg|png|gif)
+	    	mv "$bestand" "$bestemming_dir/Afbeeldingen/$bestand_naam"
+	    	echo "Bestand $bestand_naam naar Afbeeldingen verplaatst"
+	    	;;
+	    mp4|mkv|avi)
+	    	mv "$bestand" "$bestemming_dir/Videos/$bestand_naam"
+	    	echo "Bestand $Nw_bestand naar Videos verplaatst"
+	    	;;
+	    *)
+	    	mv "$bestand" "$bestemming_dir/Scripts/$bestand_naam"
+	    	echo "Bestand $Nw_bestand naar Scripts verplaatst"
+	    	;;
+	    	
+	    esac
+}
+# hier sorteren we alle bestanden die al in Downloads waren
+alle_files=$(find "$download_dir" -maxdepth 1 -type f)
+for loos_best in $alle_files; do
+  
+  best_naam=$(basename "$loos_best")
+  echo "$best_naam"
+  best_naam_ext="${best_naam##*.}"
+  sortBestanden "$loos_best" "$best_naam_ext"
+  
+done
+# In deze while true loop gebruiken we de inotifywait command voor het constant nakijken van aangepaste of toegevoegde bestanden.
+while true; do
+    echo "Entering While loop"
+	Nw_bestand=$(inotifywait -q -e close_write,moved_to --format  '%w%f' "$download_dir" )
+	
+	echo "Getting file name"
+	bestand_naam=$(basename "$Nw_bestand")
+	echo "getting extension"
+	extensie="${bestand_naam##*.}"
+	echo "lowering case"
+	lw_case_ex="${extensie,,}" #naar lowercase
+	echo "Entering cases"
+	sortBestanden "$Nw_bestand" "$lw_case_ex" "$bestand_naam"
+	# het Probleem hiervan is de volgende. In sommige gevallen bestanden (afbeeldingen met .part formaat) worden in een gecomprimeerde formaat eerst gedownload die daarna gedecompremeerd moet worden. 
+	# Omdat inotifywait te snel werkt pakt deze alleen maar de naamm van de gecomprimeerde bestand maar niet de degecomprimeerde. 
+	# Als gevolg hiervan kan de bestand niet worden verplaatst omdat deze gecomprimeerde bestand niet meer bestaat.
+done 
