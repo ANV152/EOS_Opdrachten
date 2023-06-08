@@ -55,7 +55,7 @@ while true; do
 	lw_case_ex="${extensie,,}" #naar lowercase
 	echo "Entering cases"
 	sortBestanden "$Nw_bestand" "$lw_case_ex" "$bestand_naam"
-	# het Probleem hiervan is de volgende. In sommige gevallen bestanden (afbeeldingen met .part formaat) worden in een gecomprimeerde formaat eerst gedownload die daarna gedecompremeerd moet worden. 
+	# het Probleem hiervan is de volgende. In sommige gevallen worden bestanden (afbeeldingen met .part formaat)  in een gecomprimeerde formaat eerst gedownload die daarna gedecompremeerd moet worden. 
 	# Omdat inotifywait te snel werkt pakt deze alleen maar de naamm van de gecomprimeerde bestand maar niet de degecomprimeerde. 
 	# Als gevolg hiervan kan de bestand niet worden verplaatst omdat deze gecomprimeerde bestand niet meer bestaat.
 done 
